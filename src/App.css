@@ -6,6 +6,7 @@
 .banner-card {
   background-color: white;
   width: 100vw;
+  border: 0px;
 }
 
 .banner-img {
@@ -42,6 +43,7 @@
   background-color: white;
   width: 40vh;
   margin: 1.5rem;
+  border: 0px;
 }
 
 .movie-img {
@@ -84,4 +86,19 @@
 .pagination{
   display: flex;
   justify-content: center;
+}
+
+@media only screen and (max-width: 600px) {
+  .banner-text{
+    display: none;
+  }
+  .navbar{
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+  }
+  .navbar>h1{
+    margin-left: 0% !important;
+    margin-right: 0% !important;
+  }
 }

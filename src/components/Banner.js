@@ -1,15 +1,27 @@
+import axios from 'axios';
 import React, { Component } from 'react';
-import { movies } from './getMovies';
 
 export default class Banner extends Component {
+  constructor(){
+    super();
+    this.state={
+      movies:[]
+    }
+  }
+  async componentDidMount(){
+    let movies=await axios.get('https://api.themoviedb.org/3/movie/popular?api_key=163f277147e890372ca8152b7b8b6711&language=en-US&page=1');
+    this.setState({
+        movies:[...movies.data.results]
+    })
+}
   render() {
-    let movie = [...movies.results];
+    let movie = [...this.state.movies];
     // console.log(movie);
     return (
       <>
         {
           movie.length == 0 ? (<div className='addSpace'><div className="spinner-border text-danger spinner" role="status">              
-                <span class="visually-hidden">Loading...</span>
+                <span className="visually-hidden">Loading...</span>
           </div></div>) : (
             <div className="banner-card">
               <img src={`https://image.tmdb.org/t/p/original/${movie[0].backdrop_path}`} className="card-img-top banner-img" alt="..." />
