@@ -58,13 +58,12 @@ export default class MovieList extends Component {
         const movieList = [...this.state.movies];
         return (
             <div>
-
                 {movieList.length == 0 ? (<div className="spinner-border text-danger spinner" role="status">
                     <span className="visually-hidden">Loading...</span>
                 </div>) :
                     (<div>
-                        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '2rem', textDecoration: 'underline' }}>
-                            <h2 className='display-3'>TRENDING!!</h2>
+                        <div>
+                            <h2 style={{ display: 'flex', justifyContent: 'center', marginTop: '2rem', textDecoration: 'underline' }} className='display-3'>TRENDING!!</h2>
                         </div>
                         <div className='movie-list'>
                             {

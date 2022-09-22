@@ -102,3 +102,38 @@
     margin-right: 0% !important;
   }
 }
+/* .tableContainer{
+  display: flex;
+  justify-content: space-evenly;
+} */
+.favouritesContainer{
+  /* margin-top: 2rem; */
+  margin-left: 1rem;
+}
+
+.popup{
+  /* z-index: -1; */
+  opacity: 0.8;
+  width: 17rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  bottom:1rem;
+  left: 1rem;
+  font-size: 1.5rem;
+  height: 4rem;
+  padding: 2rem;
+  /* background-color: brown; */
+  background-color: antiquewhite;
+  border: 2px solid rgb(195, 63, 63);
+  color: rgb(195, 63, 63);
+  display: none;
+  border-radius: 1rem;
+}
+.inputsContainer{
+  display: flex;
+}
+.inputsContainer>*{
+  margin-right: 1rem;
+}
