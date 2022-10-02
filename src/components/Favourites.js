@@ -7,7 +7,8 @@ export default class Favourites extends Component {
     this.state = {
       movies: [],
       genre:[],
-      currentGenre:'All Genre'
+      currentGenre:'All Genre',
+      searchMovie:''
     };
     // this.movieGenre=[];
      this.genreId = {
@@ -32,10 +33,31 @@ export default class Favourites extends Component {
       37: "Western",
     };
   }
-  deleteHandler(idx) {
-    // console.log(idx);
+  deleteHandler(idx,id) {
+    console.log(id);
     let movies = this.state.movies.filter((movies, index) => {
       return idx != index;
+    });
+    let favMovies=JSON.parse(localStorage.getItem('favMovies'));
+    favMovies=favMovies.filter((movieObj)=>{
+      return movieObj.id!=id;
+    })
+    console.log(favMovies);
+    localStorage.setItem('favMovies',JSON.stringify(favMovies));
+    let allGenre=[]
+    favMovies.forEach((movieObj)=>{
+      let genre_ids=movieObj.genre_ids[0];
+      if(genre_ids in this.genreId){
+          if(!allGenre?.find((res)=>res==this.genreId[genre_ids])){
+            allGenre.push(this.genreId[genre_ids]);
+          }
+      }
+    })
+    // movies.data.results.reduce(())
+    allGenre.unshift('All Genre');
+    this.setState({
+      movies: [...movies],
+      genre: [...allGenre]
     });
     this.setState({
       movies: [...movies],
@@ -46,8 +68,21 @@ export default class Favourites extends Component {
     setTimeout(() => {
       alertHandler.style.display = "none";
     }, 2000);
+    
   }
   render() {
+    let Filteredmovies=[...this.state.movies];
+    if(this.state.currentGenre!='All Genre')
+    Filteredmovies= Filteredmovies.filter((movieObj)=>{
+      console.log(movieObj);
+      return this.genreId[movieObj.genre_ids[0]]==this.state.currentGenre;
+    });
+    if(this.state.searchMovie!=''){
+      Filteredmovies= Filteredmovies.filter((movieObj)=>{
+        console.log(movieObj);
+        return movieObj.original_title.toLowerCase().includes(this.state.searchMovie.toLowerCase());
+      });
+    }
     return (
       <div>
         <div className="popup">
@@ -59,7 +94,7 @@ export default class Favourites extends Component {
           {
             this.state.genre.map((genre,index)=>{
              return (
-              
+  
              this.state.currentGenre==genre ?  <li
                 href="#"
                 className="list-group-item active" key={index}
@@ -81,7 +116,9 @@ export default class Favourites extends Component {
           <div className="col-sm-1 col-xs-12"></div>
           <div className="col-sm-7 col-xs-12">
             <div className="inputsContainer">
-              <input type="text" className="form-control" placeholder="Search" />
+              <input type="text" className="form-control" placeholder="Search"  onChange={(e)=>{
+                this.searchMovies(e)
+              }} />
               <input type="number" className="form-control" placeholder="Results Per Page" />
             </div>
             <hr />
@@ -97,7 +134,7 @@ export default class Favourites extends Component {
                 </tr>
               </thead>
               <tbody>
-                {this.state.movies.map((movieObj, index) => {
+                {Filteredmovies.map((movieObj, index) => {
                   return (
                     <tr key={index}>
                       <th>{index + 1}</th>
@@ -113,7 +150,7 @@ export default class Favourites extends Component {
                       <td>{movieObj.vote_average}</td>
                       <td>
                         <button className="btn btn-outline-danger"
-                          onClick={() => { this.deleteHandler(index) }} >
+                          onClick={() => { this.deleteHandler(index,movieObj.id) }} >
                           Delete
                         </button>
                       </td>
@@ -136,20 +173,16 @@ export default class Favourites extends Component {
     this.setState({
       currentGenre:currentGenre,
     });
-    let movies=[...this.state.movies];
-    // movies.filter((movieObj)=>{
-
-    // })
   }
 
   async fetchMovies() {
-    let movies = await axios.get(
-      `https://api.themoviedb.org/3/movie/popular?api_key=163f277147e890372ca8152b7b8b6711&language=en-US&page=${this.state.currPage}`
-    );
-    console.log(movies);
+    // let movies = await axios.get(
+    //   `https://api.themoviedb.org/3/movie/popular?api_key=163f277147e890372ca8152b7b8b6711&language=en-US&page=${this.state.currPage}`
+    // );
+    // console.log(movies);
+    let movies=JSON.parse(localStorage.getItem('favMovies'));
     let allGenre=[]
-    // movies.data.render=movies.data.results.splice(10);
-    movies.data.results.forEach((movieObj)=>{
+    movies.forEach((movieObj)=>{
       let genre_ids=movieObj.genre_ids[0];
       if(genre_ids in this.genreId){
           if(!allGenre?.find((res)=>res==this.genreId[genre_ids])){
@@ -157,11 +190,19 @@ export default class Favourites extends Component {
           }
       }
     })
+    // movies.data.results.reduce(())
     allGenre.unshift('All Genre');
     this.setState({
-      movies: [...movies.data.results],
+      movies: [...movies],
       genre: [...allGenre]
     });
     // console.log(allGenre);
+  }
+
+  searchMovies(e){
+    // console.log(this,e.target.value);
+    this.setState({
+      searchMovie:e.target.value
+    })
   }
 }

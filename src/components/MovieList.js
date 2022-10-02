@@ -7,9 +7,12 @@ export default class MovieList extends Component {
         this.state = {
             hover: '',
             movies: [],
-            currPage:1
+            currPage:1,
+            favMovies:[]
         }
+        this.favouriteMovieObj=[];
         this.pageNo=1;
+        // localStorage.setItem('favMovies',JSON.stringify(this.favouriteMovieObj));
     }
     handleEnter = (id) => {
         this.setState({
@@ -44,7 +47,9 @@ export default class MovieList extends Component {
     //     }
     // }
      componentDidMount() {
+        // this.favMovieHandler();
         this.fetchMovies();
+        this.favMovieHandler();
     }
 
     async fetchMovies(){
@@ -53,6 +58,27 @@ export default class MovieList extends Component {
             movies: [...movies.data.results]
         })
     }
+
+    favMovieHandler=(obj=null)=>{
+        console.log(obj);
+        let moviesArr=JSON.parse(localStorage.getItem('favMovies')) || [];
+        console.log(moviesArr);
+        if(obj!=null){
+        if(!moviesArr.find((movie)=>movie.id==obj.id)){
+            console.log(1);
+            moviesArr.push(obj);
+        } else {
+            console.log(2);
+            moviesArr=moviesArr.filter((movieObj)=>movieObj.id!=obj.id)
+        }
+    }
+        localStorage.setItem('favMovies',JSON.stringify(moviesArr));
+        let movieIds=moviesArr.map((movieObj)=>movieObj.id);
+        this.setState({
+            favMovies:[...movieIds]
+        }) 
+    }
+    
     render() {
         // console.log('update render');
         const movieList = [...this.state.movies];
@@ -74,7 +100,11 @@ export default class MovieList extends Component {
                                             <img src={`https://image.tmdb.org/t/p/original/${movieObj.backdrop_path}`} className="card-img-top movie-img" alt="..." />
                                             <h5 className="card-title movie-title">{movieObj.original_title}</h5>
                                             {
-                                                this.state.hover == movieObj.id && <div className='button-wrapper'><a href="#" className="btn btn-secondary movie-btn">Add to Favourites</a></div>
+                                                this.state.hover == movieObj.id && <div className='button-wrapper'>
+                                                 <a  className="btn btn-secondary movie-btn" onClick={()=>{this.favMovieHandler(movieObj)}}>
+                                                 {!this.state.favMovies.includes(movieObj.id) ? 'Add to Favourites' : 'Remove From Favourite'}
+                                                 </a>
+                                                </div>
                                             }
 
                                         </div>
