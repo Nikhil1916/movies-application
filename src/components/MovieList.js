@@ -55,14 +55,13 @@ export default class MovieList extends Component {
             } else {
                 moviesArr = moviesArr.filter((movieObj) => movieObj.id != obj.id)
             }
-            localStorage.setItem('favMovies', JSON.stringify(moviesArr));
-            let movieIds = moviesArr.map((movieObj) => movieObj.id);
-            this.setState({
-                favMovies: [...movieIds]
-            })
-        } else {
-            localStorage.setItem('favMovies', JSON.stringify(moviesArr));
         }
+        localStorage.setItem('favMovies', JSON.stringify(moviesArr));
+        let movieIds = moviesArr.map((movieObj) => movieObj.id);
+        this.setState({
+            favMovies: [...movieIds]
+        })
+
     }
 
     render() {
