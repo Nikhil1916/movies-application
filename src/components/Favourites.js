@@ -282,15 +282,15 @@ export default class Favourites extends Component {
     })
   }
 
-  nextPage = () => {
-    this.setState({
-      currPage: this.state.currPage + 1
-    })
-  }
+  // nextPage = () => {
+  //   this.setState({
+  //     currPage: this.state.currPage + 1
+  //   })
+  // }
 
-  prevPage = () => {
-    this.setState({
-      currPage: this.state.currPage > 0 ? this.state.currPage - 1 : 0
-    })
-  }
+  // prevPage = () => {
+  //   this.setState({
+  //     currPage: this.state.currPage > 0 ? this.state.currPage - 1 : 0
+  //   })
+  // }
 }
